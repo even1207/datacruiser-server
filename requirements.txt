@@ -1,0 +1,19 @@
+# Flask Web Framework
+flask>=3.0.0
+
+# Environment variables
+python-dotenv>=1.0.0
+
+# Data processing (use latest compatible with Python 3.13)
+pandas>=2.2.0
+
+# LangChain and OpenAI (latest compatible versions)
+langchain>=0.2.0
+langchain-openai>=0.1.0
+langchain-experimental>=0.0.60
+
+# OpenAI (latest compatible)
+openai>=1.30.0
+
+# Additional dependencies
+pydantic>=2.0.0
