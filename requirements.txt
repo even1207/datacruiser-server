@@ -1,20 +1,37 @@
-# Flask Web Framework
+# Flask Web Framework - Minimum stable version
 flask>=3.0.0
 
 # Environment variables
 python-dotenv>=1.0.0
 
-# Data processing (use latest compatible with Python 3.13)
+# Data processing - Minimum stable versions
 pandas>=2.2.0
-numpy>=1.24.0,<2.0.0
+numpy>=1.26.0,<2.0.0
 
-# AI/ML Dependencies for RAG with TimesFM + FAISS
-torch>=2.0.0
-transformers>=4.35.0
-faiss-cpu>=1.7.4
+# AI/ML Dependencies for RAG with TimesFM + FAISS - Minimum stable versions
+torch>=2.4.0
+transformers>=4.44.0
+faiss-cpu>=1.8.0
 
-# OpenAI (latest compatible)
-openai>=1.30.0
+# Database for statistical queries
+duckdb>=1.0.0
+
+# OpenAI - Minimum stable version
+openai>=1.35.0
 
 # Additional dependencies
-pydantic>=2.0.0
+pydantic>=2.9.0
+
+# Development dependencies - Minimum stable versions
+pytest>=8.3.0
+black>=24.4.0
+flake8>=7.1.0
+mypy>=1.10.0
+pytest-cov>=5.0.0
+
+# Additional stable dependencies for better compatibility
+requests>=2.32.0
+urllib3>=2.2.0
+certifi>=2024.8.0
+charset-normalizer>=3.3.0
+idna>=3.7.0

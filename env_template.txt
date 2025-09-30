@@ -1,0 +1,30 @@
+# DataCruiser RAG Server Environment Configuration
+# Copy this file to .env and update with your actual values
+
+# OpenAI Configuration (Required for LLM functionality)
+OPENAI_API_KEY=your-openai-api-key-here
+
+# Server Configuration
+HOST=0.0.0.0
+PORT=5080
+DEBUG=false
+
+# Logging Configuration
+LOG_LEVEL=INFO
+
+# Optional: Flask Secret Key (for production)
+SECRET_KEY=your-secret-key-here
+
+# Optional: Additional OpenAI Settings
+# OPENAI_MODEL=gpt-4o-mini
+# OPENAI_TEMPERATURE=0.3
+# OPENAI_MAX_TOKENS=500
+
+# Optional: Cache Settings
+# CACHE_DIR=cache
+# MAX_RECORDS=5000
+# BATCH_SIZE=10
+
+# Optional: Model Settings
+# TIMESFM_MODEL_NAME=google/timesfm-2.0-500m-pytorch
+# EMBEDDING_DIMENSION=512
