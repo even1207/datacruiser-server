@@ -53,11 +53,12 @@ def start_server():
         print("✅ Server started successfully!")
         print("\n🔗 Server is running at: http://localhost:5080")
         print("\n📋 Available endpoints:")
-        print("  - GET  /           : Health check")
-        print("  - POST /api/ask    : Ask questions about footfall data")
-        print("  - GET  /data/info : Data information")
-        print("  - POST /cache/clear: Clear cache")
-        print("  - GET  /cache/status: Cache status")
+        print("  - GET  /                    : Health check")
+        print("  - POST /api/ask            : Ask questions about footfall data")
+        print("  - POST /api/ask-hybrid     : Hybrid statistical/trend queries")
+        print("  - GET  /api/system-info    : System information")
+        print("  - POST /api/datasets/upload: Upload CSV datasets")
+        print("  - POST /api/datasets/<id>/ask: Query uploaded dataset")
         
         print("\n🧪 Testing RAG functionality...")
         try:

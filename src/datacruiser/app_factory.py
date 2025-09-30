@@ -13,9 +13,8 @@ from .services.model_service import ModelService
 from .services.rag_service import RAGService
 from .services.llm_service import LLMService
 from .services.hybrid_rag_service import HybridRAGService
-from .services.air_quality_service import AirQualityService
 from .services.uploaded_dataset_service import UploadedDatasetService
-from .routes import api_bp, health_bp, cache_bp, air_quality_bp
+from .routes import api_bp
 
 # Initialize environment
 Config.init_environment()
@@ -31,10 +30,20 @@ def create_app() -> Flask:
     app.config.from_object(Config)
 
     # Register blueprints
-    app.register_blueprint(health_bp)
     app.register_blueprint(api_bp, url_prefix='/api')
-    app.register_blueprint(cache_bp, url_prefix='/cache')
-    app.register_blueprint(air_quality_bp, url_prefix='/air-quality')
+
+    @app.route("/", methods=["GET"])
+    def root_health():
+        return {
+            "service": "DataCruiser API",
+            "status": "running",
+            "endpoints": [
+                "/api/ask",
+                "/api/ask-hybrid",
+                "/api/system-info",
+                "/api/datasets/<id>/ask"
+            ]
+        }
 
     # Initialize services
     model_service = ModelService()
@@ -50,20 +59,11 @@ def create_app() -> Flask:
     )
     hybrid_service = HybridRAGService(model_service, llm_service, csv_file_path)
 
-    # Initialize air quality service
-    air_quality_data_dir = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        'data',
-        'nsw_106_sensors_2025_09_05'
-    )
-    air_quality_service = AirQualityService(air_quality_data_dir)
-
     # Store services in app context
     app.model_service = model_service
     app.rag_service = rag_service
     app.llm_service = llm_service
     app.hybrid_service = hybrid_service
-    app.air_quality_service = air_quality_service
     app.dataset_service = dataset_service
 
     # Add request context processors
@@ -73,7 +73,6 @@ def create_app() -> Flask:
         g.llm_service = llm_service
         g.model_service = model_service
         g.hybrid_service = hybrid_service
-        g.air_quality_service = air_quality_service
         g.dataset_service = dataset_service
 
     return app
@@ -97,14 +96,6 @@ def initialize_system(app: Flask) -> bool:
         # Initialize hybrid service data
         if not app.hybrid_service.initialize_data():
             logger.error("❌ Failed to initialize hybrid service data")
-            return False
-
-        # Initialize air quality service data
-        try:
-            app.air_quality_service.process_csv_files()
-            logger.info("✅ Air quality data processed successfully")
-        except Exception as e:
-            logger.error(f"❌ Failed to process air quality data: {e}")
             return False
 
         logger.info("✅ System initialization completed successfully!")
@@ -151,13 +142,12 @@ def main():
 
         logger.info("🚀 Starting RAG-based Footfall Analysis API Server (Refactored Version)...")
         logger.info("🔗 Available endpoints:")
-        logger.info("  - GET  /           : Health check and system status")
-        logger.info("  - POST /api/ask    : Ask questions about footfall data (original RAG)")
-        logger.info("  - POST /api/ask-hybrid: Ask questions (hybrid: statistical + trend)")
+        logger.info("  - GET  /               : Health check")
+        logger.info("  - POST /api/ask        : Ask questions about footfall data")
+        logger.info("  - POST /api/ask-hybrid : Hybrid statistical/trend queries")
         logger.info("  - GET  /api/system-info: Get system information")
-        logger.info("  - GET  /data/info  : Get data and cache information")
-        logger.info("  - POST /cache/clear: Clear all cache files")
-        logger.info("  - GET  /cache/status: Get detailed cache status")
+        logger.info("  - POST /api/datasets/upload     : Upload datasets")
+        logger.info("  - POST /api/datasets/<id>/ask   : Query uploaded dataset")
 
         app.run(
             host=Config.HOST,
@@ -173,4 +163,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
